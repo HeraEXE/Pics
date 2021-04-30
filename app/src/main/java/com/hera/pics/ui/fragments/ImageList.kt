@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,6 +20,7 @@ class ImageList : Fragment() {
     private lateinit var _view: View
     private lateinit var viewModel: ImageViewModel
     private lateinit var recycler: RecyclerView
+    private lateinit var noInternetImage: ImageView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -27,7 +30,6 @@ class ImageList : Fragment() {
 
         // Setting View Model.
         viewModel = ViewModelProvider(this).get(ImageViewModel::class.java)
-        viewModel.getImageUri()
 
         // Setting recycler.
         val frame: FrameLayout? = _view.findViewById(R.id.frame)
@@ -39,15 +41,32 @@ class ImageList : Fragment() {
             recycler = _view.findViewById(R.id.image_recycler)
             recycler.layoutManager = GridLayoutManager(activity, 2)
         }
-        recycler.adapter = ImageListAdapter(viewModel.image)
+
+        noInternetImage = _view.findViewById(R.id.no_internet_image)
 
         return _view
     }
 
+
     override fun onStart() {
+        super.onStart()
+
+        viewModel.getImageUri()
+        // Checks Internet connection.
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            if (viewModel.status.value == ImageViewModel.FAILURE) {
+                recycler.visibility = View.GONE
+                noInternetImage.visibility = View.VISIBLE
+                recycler.adapter = ImageListAdapter(MutableLiveData<Array<String>>())
+            } else {
+                noInternetImage.visibility = View.GONE
+                recycler.visibility = View.VISIBLE
+                recycler.adapter = ImageListAdapter(viewModel.image)
+            }
+        })
+
         viewModel.image.observe(viewLifecycleOwner, Observer {
             recycler.adapter?.notifyDataSetChanged()
         })
-        super.onStart()
     }
 }

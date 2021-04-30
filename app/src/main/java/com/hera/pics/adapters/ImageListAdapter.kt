@@ -1,9 +1,11 @@
 package com.hera.pics.adapters
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.Navigation
@@ -36,6 +38,7 @@ class ImageListAdapter(val image: MutableLiveData<Array<String>>) : RecyclerView
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(holder.context)
             .load(image.value?.get(position))
+            .error(R.drawable.baseline_cloud_off_24)
             .into(holder.imageView)
 
         holder.imageView.setOnClickListener {

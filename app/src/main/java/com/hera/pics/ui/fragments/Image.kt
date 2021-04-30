@@ -24,8 +24,10 @@ class Image : Fragment() {
         activity?.let {
             Glide.with(it)
                 .load(imageUri)
+                .error(R.drawable.baseline_cloud_off_24)
                 .into(image)
         }
+
 
         return view
     }
