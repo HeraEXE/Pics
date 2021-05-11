@@ -11,14 +11,14 @@ import java.lang.Exception
 class ImageViewModel : ViewModel() {
     private val scope = CoroutineScope(Dispatchers.Main)
     private val repository = Repository()
-    val image = MutableLiveData<Array<String>>()
+    val images = MutableLiveData<Array<String>>()
     var status = MutableLiveData<Int>()
 
 
     fun getImageUri() {
         scope.launch {
             try {
-                image.value = repository.getImageUri()
+                images.value = repository.getImageUri()
                 status.value = SUCCESS
             } catch (e: Exception) {
                 status.value = FAILURE

@@ -61,11 +61,11 @@ class ImageList : Fragment() {
             } else {
                 noInternetImage.visibility = View.GONE
                 recycler.visibility = View.VISIBLE
-                recycler.adapter = ImageListAdapter(viewModel.image)
+                recycler.adapter = ImageListAdapter(viewModel.images)
             }
         })
 
-        viewModel.image.observe(viewLifecycleOwner, Observer {
+        viewModel.images.observe(viewLifecycleOwner, Observer {
             recycler.adapter?.notifyDataSetChanged()
         })
     }

@@ -11,7 +11,7 @@ object RetrofitInstance {
             .build()
     }
 
-    val api: JsonPlaceHolderApi by lazy {
-        retrofit.create(JsonPlaceHolderApi::class.java)
+    val api: ImageApi by lazy {
+        retrofit.create(ImageApi::class.java)
     }
 }
